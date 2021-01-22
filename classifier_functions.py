@@ -3,6 +3,7 @@ import re
 import json
 import lime
 from lime.lime_text import LimeTextExplainer
+from sklearn.pipeline import make_pipeline
 
 
 # def get_keys(path):
