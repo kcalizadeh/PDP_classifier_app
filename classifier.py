@@ -200,4 +200,5 @@ def generate_explainer_html(n_clicks, n_submit, text):
 server = app.server
 
 if __name__ == '__main__':
+    app.config.suppress_callback_exceptions = True
     app.run_server(debug=True)                                               
