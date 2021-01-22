@@ -210,7 +210,7 @@ def generate_explainer_html(n_clicks, n_submit, username,
               [Input(component_id="classification-bar-submit-button", component_property="n_clicks")],
             #   Input(component_id="classification-bar", component_property="n_submit")],
               [State(component_id="classification-bar", component_property="value")])
-def generate_explainer_html(n_clicks, n_submit, text, 
+def generate_explainer_html(n_clicks, text, 
                             # model=nb_model, vectorizer=vectorizer,
                             class_names = [name.replace('_', ' ').title() for name in list(school_label_dict.keys())]):
     if n_clicks < 1:# and n_submit < 1:
