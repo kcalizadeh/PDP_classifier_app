@@ -63,12 +63,12 @@ access_secret = os.environ['TWITTER_ACCESS_SECRET']
 # with open('gru_tokenizer.pkl', 'rb') as f:
 #     tokenizer = pickle.load(f)
 
-with open('NB_model.pkl', 'rb') as f:
-    nb_model = pickle.load(f)
-# with open('random_forest.pkl', 'rb') as f:
-#     rf_model = pickle.load(f)
-with open('vectorizer.pkl', 'rb') as f:
-    vectorizer = pickle.load(f)
+# with open('NB_model.pkl', 'rb') as f:
+#     nb_model = pickle.load(f)
+# # with open('random_forest.pkl', 'rb') as f:
+# #     rf_model = pickle.load(f)
+# with open('vectorizer.pkl', 'rb') as f:
+#     vectorizer = pickle.load(f) .
 
 # set up classification explanation pipeline
 # padder = Padder(450)
@@ -152,6 +152,10 @@ def generate_explainer_html(n_clicks, n_submit, username,
     if n_clicks < 1 and n_submit < 1:
         return [html.Br(), html.P('The classification can take some time. Please be patient, and your text classification will appear here when it is ready.')]
     if n_clicks > 0 or n_submit > 0:
+        with open('NB_model.pkl', 'rb') as f:
+            nb_model = pickle.load(f)
+        with open('vectorizer.pkl', 'rb') as f:
+            vectorizer = pickle.load(f)
         # try:
             tweets = get_tweet_text(api, username)   
             text = clean_text_for_explaining(tweets)
@@ -182,14 +186,18 @@ def generate_explainer_html(n_clicks, n_submit, username,
               [Input(component_id="classification-bar-submit-button", component_property="n_clicks"),
               Input(component_id="classification-bar", component_property="n_submit")],
               [State(component_id="classification-bar", component_property="value")])
-def generate_explainer_html(n_clicks, n_submit, username, 
+def generate_explainer_html(n_clicks, n_submit, text, 
                             model=nb_model, vectorizer=vectorizer,
                             class_names = [name.replace('_', ' ').title() for name in list(school_label_dict.keys())]):
     if n_clicks < 1 and n_submit < 1:
         return [html.Br(), html.P('The classification can take some time. Please be patient, and your text classification will appear here when it is ready.')]
     if n_clicks > 0 or n_submit > 0:
+        with open('NB_model.pkl', 'rb') as f:
+            nb_model = pickle.load(f)
+        with open('vectorizer.pkl', 'rb') as f:
+            vectorizer = pickle.load(f)
         # try:
-            text = clean_text_for_explaining(tweets)
+            text = clean_text_for_explaining(text)
             # class_names = [name.replace('_', ' ').title() for name in list(school_label_dict.keys())]
             # explainer = lime_text.LimeTextExplainer(class_names=class_names,
             #                                         bow=False,
