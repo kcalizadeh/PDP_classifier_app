@@ -164,7 +164,7 @@ def generate_explainer_html(n_clicks, n_submit, username,
             #                                 num_features=10, 
             #                                 labels=[0,1,2,3,4,5,6,7,8,9],
             #                                 top_labels=3)
-            exp = classify_text(text, model, vectorizer)
+            exp = classify_text(text, model, vectorizer, class_names=class_names)
             obj = html.Iframe(
                 srcDoc=exp.as_html(),
                 width='100%',
@@ -200,7 +200,7 @@ def generate_explainer_html(n_clicks, n_submit, username,
             #                                 num_features=10, 
             #                                 labels=[0,1,2,3,4,5,6,7,8,9],
             #                                 top_labels=3)
-            exp = classify_text(text, model, vectorizer)
+            exp = classify_text(text, model, vectorizer, class_names=class_names)
             obj = html.Iframe(
                 srcDoc=exp.as_html(),
                 width='100%',
