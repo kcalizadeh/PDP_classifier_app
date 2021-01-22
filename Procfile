@@ -1,1 +1,1 @@
-web: gunicorn stats:server --timeout 300
+web: gunicorn classifier:server --timeout 300

@@ -42,14 +42,11 @@ class Padder(BaseEstimator, TransformerMixin):
         X = pad_sequences(X, maxlen=self.maxlen)
         return X
 
-keys = get_keys('api_keys.json')
-consumer_key = keys['tw_consumer_key']
-consumer_secret = keys['tw_consumer_secret']
-access_token = keys['tw_access_token']
-access_secret = keys['tw_access_secret']
-bearer_token = keys['bearer_token']
-access_key = keys['s3_access_key']
-secret = keys['s3_secret_key']
+# pull keys from environment
+consumer_key = os.environ['TWITTER_CONSUMER_KEY']
+consumer_secret = os.environ['TWITTER_CONSUMER_SECRET']
+access_token = os.environ['TWITTER_ACCESS_TOKEN']
+access_secret = os.environ['TWITTER_ACCESS_SECRET']
 
 # set styling
 external_stylesheets = [dbc.themes.CERULEAN]
@@ -80,6 +77,7 @@ school_label_dict = {'analytic': 0,
  'phenomenology': 7,
  'plato': 8,
  'rationalism': 9}
+
 
 # Twitter Auth
 auth = tw.OAuthHandler(consumer_key, consumer_secret)
