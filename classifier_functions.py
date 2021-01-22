@@ -1,6 +1,7 @@
 import tweepy as tw
 import re 
 import json
+import lime
 
 
 # def get_keys(path):
@@ -23,7 +24,7 @@ import json
 
 def get_tweet_text(api, username):
     tweets = api.user_timeline(screen_name=username, 
-                           count=200,
+                           count=50,
                            include_rts = False,
                            tweet_mode = 'extended')
     text_list = []
@@ -42,6 +43,16 @@ def clean_text_for_explaining(text):
     for item in remove_list:
         text = re.sub(r''+item+'', ' ', text)   
     return text
+
+def classify_text(to_classify, model, vectorizer):
+    predictor_pipeline = make_pipeline(vectorizer, model) 
+    class_names = ['analytic', 'continental', 'phenomenology', 'german_idealism', 'plato', 'aristotle', 'empiricism', 'rationalism']
+    explainer = LimeTextExplainer(class_names=class_names)
+    exp = explainer.explain_instance(to_classify, predictor_pipeline.predict_proba, num_features=8, labels=[0, 1, 2, 3, 4, 5, 6, 7])
+    # exp.show_in_notebook(text=True)
+    return exp
+
+
 
 
 

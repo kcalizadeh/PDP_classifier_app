@@ -19,29 +19,34 @@ from lime.lime_text import LimeTextExplainer
 
 from classifier_functions import *
 
-class TextsToSequences(BaseEstimator, TransformerMixin):
-    def __init__(self,  tokenizer):
-        self.tokenizer = tokenizer
+# set styling
+external_stylesheets = [dbc.themes.CERULEAN]
+
+app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
+
+# class TextsToSequences(BaseEstimator, TransformerMixin):
+#     def __init__(self,  tokenizer):
+#         self.tokenizer = tokenizer
         
-    def fit(self, texts, y=None):
-        return self
+#     def fit(self, texts, y=None):
+#         return self
     
-    def transform(self, texts, y=None):
-        return np.array(self.tokenizer.texts_to_sequences(texts))
+#     def transform(self, texts, y=None):
+#         return np.array(self.tokenizer.texts_to_sequences(texts))
 
 
-class Padder(BaseEstimator, TransformerMixin):
-    def __init__(self, maxlen=500):
-        self.maxlen = maxlen
-        self.max_index = None
+# class Padder(BaseEstimator, TransformerMixin):
+#     def __init__(self, maxlen=500):
+#         self.maxlen = maxlen
+#         self.max_index = None
         
-    def fit(self, X, y=None):
-        self.max_index = pad_sequences(X, maxlen=self.maxlen).max()
-        return self
+#     def fit(self, X, y=None):
+#         self.max_index = pad_sequences(X, maxlen=self.maxlen).max()
+#         return self
     
-    def transform(self, X, y=None):
-        X = pad_sequences(X, maxlen=self.maxlen)
-        return X
+#     def transform(self, X, y=None):
+#         X = pad_sequences(X, maxlen=self.maxlen)
+#         return X
 
 # pull keys from environment
 consumer_key = os.environ['TWITTER_CONSUMER_KEY']
@@ -49,18 +54,21 @@ consumer_secret = os.environ['TWITTER_CONSUMER_SECRET']
 access_token = os.environ['TWITTER_ACCESS_TOKEN']
 access_secret = os.environ['TWITTER_ACCESS_SECRET']
 
-# set styling
-external_stylesheets = [dbc.themes.CERULEAN]
-
-app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
 
 # model_path = 'model_data\classification_models\\NN_weights_epoch_09_0.7928.hdf5'
 # model = load_model(model_path)
 
-model = load_model('NN_weights_epoch_09_0.7928.hdf5')
+# model = load_model('NN_weights_epoch_09_0.7928.hdf5')
 
-with open('gru_tokenizer.pkl', 'rb') as f:
-    tokenizer = pickle.load(f)
+# with open('gru_tokenizer.pkl', 'rb') as f:
+#     tokenizer = pickle.load(f)
+
+with open('NB_model.pkl', 'rb') as f:
+    nb_model = pickle.load(f)
+# with open('random_forest.pkl', 'rb') as f:
+#     rf_model = pickle.load(f)
+with open('vectorizer.pkl', 'rb') as f:
+    vectorizer = pickle.load(f)
 
 # set up classification explanation pipeline
 padder = Padder(450)
@@ -137,22 +145,23 @@ def render_content(tab):
               [Input(component_id="twitter-bar-submit-button", component_property="n_clicks"),
               Input(component_id="twitter-bar", component_property="n_submit")],
               [State(component_id="twitter-bar", component_property="value")])
-def generate_explainer_html(n_clicks, n_submit, username, api=api):
+def generate_explainer_html(n_clicks, n_submit, username, api=api, model=nb_model, vectorizer=vectorizer):
     if n_clicks < 1 and n_submit < 1:
         return [html.Br(), html.P('The classification can take some time. Please be patient, and your text classification will appear here when it is ready.')]
     if n_clicks > 0 or n_submit > 0:
         try:
             tweets = get_tweet_text(api, username)   
             text = clean_text_for_explaining(tweets)
-            class_names = [name.replace('_', ' ').title() for name in list(school_label_dict.keys())]
-            explainer = lime_text.LimeTextExplainer(class_names=class_names,
-                                                    bow=False,
-                                                    split_expression=r'[\s+|\.\s+|,\s+]')
-            exp = explainer.explain_instance(text, 
-                                            pipeline.predict, 
-                                            num_features=10, 
-                                            labels=[0,1,2,3,4,5,6,7,8,9],
-                                            top_labels=3)
+            # class_names = [name.replace('_', ' ').title() for name in list(school_label_dict.keys())]
+            # explainer = lime_text.LimeTextExplainer(class_names=class_names,
+            #                                         bow=False,
+            #                                         split_expression=r'[\s+|\.\s+|,\s+]')
+            # exp = explainer.explain_instance(text, 
+            #                                 pipeline.predict, 
+            #                                 num_features=10, 
+            #                                 labels=[0,1,2,3,4,5,6,7,8,9],
+            #                                 top_labels=3)
+            exp = classify_text(text, model, vectorizer)
             obj = html.Iframe(
                 srcDoc=exp.as_html(),
                 width='100%',
@@ -170,21 +179,23 @@ def generate_explainer_html(n_clicks, n_submit, username, api=api):
               [Input(component_id="classification-bar-submit-button", component_property="n_clicks"),
               Input(component_id="classification-bar", component_property="n_submit")],
               [State(component_id="classification-bar", component_property="value")])
-def generate_explainer_html(n_clicks, n_submit, text):
+def generate_explainer_html(n_clicks, n_submit, text, model=nb_model, vectorizer=vectorizer):
     if n_clicks < 1: #and n_submit < 1:
         return 'The classification can take some time. Please be patient, and your text classification will appear here when it is ready.' 
     if n_clicks > 0:# or n_submit > 0:
         try:
             text = clean_text_for_explaining(text)    
-            class_names = [name.replace('_', ' ').title() for name in list(school_label_dict.keys())]
-            explainer = lime_text.LimeTextExplainer(class_names=class_names,
-                                                    bow=False,
-                                                    split_expression=r'[\s+|\.\s+|,\s+]')
-            exp = explainer.explain_instance(text, 
-                                            pipeline.predict, 
-                                            num_features=10, 
-                                            labels=[0,1,2,3,4,5,6,7,8,9],
-                                            top_labels=3)
+            # class_names = [name.replace('_', ' ').title() for name in list(school_label_dict.keys())]
+            # explainer = lime_text.LimeTextExplainer(class_names=class_names,
+            #                                         bow=False,
+            #                                         split_expression=r'[\s+|\.\s+|,\s+]')
+            # exp = explainer.explain_instance(text, 
+            #                                 pipeline.predict, 
+            #                                 num_features=10, 
+            #                                 labels=[0,1,2,3,4,5,6,7,8,9],
+            #                                 top_labels=3)
+            exp = classify_text(text, model, vectorizer)
+
             obj = html.Iframe(
                 srcDoc=exp.as_html(),
                 width='100%',
