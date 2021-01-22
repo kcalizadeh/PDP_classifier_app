@@ -109,8 +109,8 @@ twitter_bar = html.Div(id="twitter-bar-container", children=
                     type='text',
                     n_submit=0,
                     autoFocus=True
-                    style={'width': '100%'},), width=8),
-        dbc.Col(dbc.Button("SUBMIT", id="twitter-bar-submit-button", color="primary", className="mr-1", n_clicks=0), width=2)
+                    style={'width': '100%'}), width=7.8),
+        dbc.Col(dbc.Button("SUBMIT", id="twitter-bar-submit-button", color="primary", className="mr-1", n_clicks=0), width=1.8)
     ])
 ])
 
