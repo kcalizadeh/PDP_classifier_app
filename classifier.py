@@ -144,10 +144,13 @@ def render_content(tab):
     if tab == 'tab-twitter': return [html.Br(), 
                                     twitter_bar, html.Div(id='twitter-bar-output', children=[])]
     if tab == 'tab-text-input': return [html.Br(), html.H3("Classification by Text"),
-                                            dbc.Row([
-                                                    dbc.Col(search_bar, width=5),
-                                                    dbc.Col(html.Div(id="output", children=[html.Div(id='classification-bar-output', children=[])]))
-                                                    ])]     
+                                        search_bar, html.Div(id="output", children=[html.Div(id='classification-bar-output', children=[])
+                                        ])
+                                        ]
+                                            # # dbc.Row([
+                                            #         dbc.Col(search_bar, width=5),
+                                            #         dbc.Col(html.Div(id="output", children=[html.Div(id='classification-bar-output', children=[])]))
+                                            #         ])]     
 
 
 
