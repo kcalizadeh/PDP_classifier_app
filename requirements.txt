@@ -81,7 +81,8 @@ lime==0.2.0.1
 # numpy==1.18.5
 # oauthlib==3.1.0
 # opt-einsum==3.3.0
-pandas == 0.20.ke3
+pandas 
+# == 0.20.ke3
 # pandasql==0.7.3
 # pandocfilters==1.4.2
 # patool==1.12
