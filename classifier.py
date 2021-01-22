@@ -108,6 +108,7 @@ twitter_bar = html.Div(id="twitter-bar-container", children=
     ])
 ])
 
+
 # search bar object
 search_bar = html.Div(id="classification-bar-container", children=
     [
@@ -149,7 +150,7 @@ def generate_explainer_html(n_clicks, n_submit, username, api=api, model=nb_mode
     if n_clicks < 1 and n_submit < 1:
         return [html.Br(), html.P('The classification can take some time. Please be patient, and your text classification will appear here when it is ready.')]
     if n_clicks > 0 or n_submit > 0:
-        try:
+        # try:
             tweets = get_tweet_text(api, username)   
             text = clean_text_for_explaining(tweets)
             # class_names = [name.replace('_', ' ').title() for name in list(school_label_dict.keys())]
@@ -169,8 +170,8 @@ def generate_explainer_html(n_clicks, n_submit, username, api=api, model=nb_mode
                 style={'border': '2px #d3d3d3 solid'},
             )
             return obj
-        except:
-            return 'Sorry, something went wrong.'
+        # except:
+            # return 'Sorry, something went wrong.'
 
 
 
@@ -183,7 +184,7 @@ def generate_explainer_html(n_clicks, n_submit, text, model=nb_model, vectorizer
     if n_clicks < 1: #and n_submit < 1:
         return 'The classification can take some time. Please be patient, and your text classification will appear here when it is ready.' 
     if n_clicks > 0:# or n_submit > 0:
-        try:
+        # try:
             text = clean_text_for_explaining(text)    
             # class_names = [name.replace('_', ' ').title() for name in list(school_label_dict.keys())]
             # explainer = lime_text.LimeTextExplainer(class_names=class_names,
@@ -203,8 +204,8 @@ def generate_explainer_html(n_clicks, n_submit, text, model=nb_model, vectorizer
                 style={'border': '2px #d3d3d3 solid'},
             )
             return obj
-        except:
-            return 'Sorry, something went wrong.'
+        # except:
+            # return 'Sorry, something went wrong.'
 
 
 

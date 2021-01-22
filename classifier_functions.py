@@ -2,6 +2,7 @@ import tweepy as tw
 import re 
 import json
 import lime
+from lime.lime_text import LimeTextExplainer
 
 
 # def get_keys(path):
