@@ -121,7 +121,7 @@ search_bar = html.Div(id="classification-bar-container", children=
                     placeholder="Enter text to classify - the more you can provide, the more accurate the classification will be. \n\nNote that some very common words will be removed from your submission to improve classification accuracy.",
                     type='text',
                     n_submit=0,
-                    style={'width': '100%', 'height': 600},),
+                    style={'width': '100%', 'height': 600, 'vertical-align': 'top', 'text-align': 'left'},),
         dbc.Button("SUBMIT", id="classification-bar-submit-button", color="primary", className="mr-1", n_clicks=0)
     ])
 
