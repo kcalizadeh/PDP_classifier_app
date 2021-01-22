@@ -26,7 +26,7 @@ from sklearn.pipeline import make_pipeline
 
 def get_tweet_text(api, username):
     tweets = api.user_timeline(screen_name=username, 
-                           count=50,
+                           count=20,
                            include_rts = False,
                            tweet_mode = 'extended')
     text_list = []

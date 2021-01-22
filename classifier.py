@@ -2,17 +2,17 @@ import dash
 from dash.dependencies import Input, Output
 import dash_core_components as dcc
 import dash_html_components as html
-import numpy as np
+# import numpy as np
 import os
 import plotly.express as px
 import pickle
 import json
 import dash_bootstrap_components as dbc
 from dash.dependencies import Input, Output, State
-from tensorflow.keras.models import load_model
-from sklearn.base import BaseEstimator, TransformerMixin
+# from tensorflow.keras.models import load_model
+# from sklearn.base import BaseEstimator, TransformerMixin
 from sklearn.pipeline import make_pipeline
-from keras.preprocessing.sequence import pad_sequences
+# from keras.preprocessing.sequence import pad_sequences
 import lime
 from lime import lime_text
 from lime.lime_text import LimeTextExplainer
@@ -122,7 +122,7 @@ search_bar = html.Div(id="classification-bar-container", children=
 
 
 
-
+# overall layout
 app.layout = html.Div([
     dcc.Tabs(id='classifier-tabs', value='tab-text-input', children=[
         dcc.Tab(label='Enter Your Own Text', value='tab-text-input'),
@@ -130,6 +130,9 @@ app.layout = html.Div([
     html.Div(id='classifier-tabs-content')
 ])
 
+
+
+# text input callback
 @app.callback(Output('classifier-tabs-content', 'children'),
               [Input('classifier-tabs', 'value')])
 def render_content(tab):
@@ -140,6 +143,8 @@ def render_content(tab):
                                                     dbc.Col(search_bar, width=5),
                                                     dbc.Col(html.Div(id="output", children=[html.Div(id='classification-bar-output', children=[])]))
                                                     ])]     
+
+
 
 # callback for twitter search bar
 @app.callback(Output(component_id="twitter-bar-output", component_property="children"),
