@@ -3,23 +3,23 @@ import re
 import json
 
 
-def get_keys(path):
-    with open(path) as f:
-        return json.load(f)
+# def get_keys(path):
+#     with open(path) as f:
+#         return json.load(f)
 
-keys = get_keys('api_keys.json')
-consumer_key = keys['tw_consumer_key']
-consumer_secret = keys['tw_consumer_secret']
-access_token = keys['tw_access_token']
-access_secret = keys['tw_access_secret']
-bearer_token = keys['bearer_token']
-username = keys['s3_username']
-access_key = keys['s3_access_key']
-secret = keys['s3_secret_key']
+# keys = get_keys('api_keys.json')
+# consumer_key = keys['tw_consumer_key']
+# consumer_secret = keys['tw_consumer_secret']
+# access_token = keys['tw_access_token']
+# access_secret = keys['tw_access_secret']
+# bearer_token = keys['bearer_token']
+# username = keys['s3_username']
+# access_key = keys['s3_access_key']
+# secret = keys['s3_secret_key']
 
-auth = tw.OAuthHandler(consumer_key, consumer_secret)
-auth.set_access_token(access_token, access_secret)
-api = tw.API(auth)
+# auth = tw.OAuthHandler(consumer_key, consumer_secret)
+# auth.set_access_token(access_token, access_secret)
+# api = tw.API(auth)
 
 def get_tweet_text(api, username):
     tweets = api.user_timeline(screen_name=username, 
