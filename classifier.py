@@ -147,7 +147,7 @@ def render_content(tab):
               Input(component_id="twitter-bar", component_property="n_submit")],
               [State(component_id="twitter-bar", component_property="value")])
 def generate_explainer_html(n_clicks, n_submit, username, 
-                            # api=api, model=nb_model, vectorizer=vectorizer,
+                            api=api,#model=nb_model, vectorizer=vectorizer,
                             class_names = [name.replace('_', ' ').title() for name in list(school_label_dict.keys())]):
     if n_clicks < 1 and n_submit < 1:
         return [html.Br(), html.P('The classification can take some time. Please be patient, and your text classification will appear here when it is ready.')]
