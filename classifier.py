@@ -71,9 +71,9 @@ with open('vectorizer.pkl', 'rb') as f:
     vectorizer = pickle.load(f)
 
 # set up classification explanation pipeline
-padder = Padder(450)
-sequencer = TextsToSequences(tokenizer)
-pipeline = make_pipeline(sequencer, padder, model)
+# padder = Padder(450)
+# sequencer = TextsToSequences(tokenizer)
+# pipeline = make_pipeline(sequencer, padder, model)
 
 # set up labels
 school_label_dict = {'analytic': 0,
