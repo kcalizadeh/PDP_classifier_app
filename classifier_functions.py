@@ -41,7 +41,7 @@ def clean_text_for_explaining(text):
     text = re.sub('_', ' ', text)
     remove_list = ["(?i)you'll", '(?i)you', '\sI\s', "I'm", "I'll", "I've", '(?i)\swe\s', "(?i)you're", "(?i)\syour\s", "(?i)they'll"
                    "(?i)they\s", "(?i)\stheir", "(?i)there's", "(?i)that's", '@', '(?i)\shtt[^\s]+', '(?i)\swww[^\s]+', '\s[^aI]\s',
-                   "(?i)\sthey're", "aren't"] 
+                   "(?i)\sthey're", "aren't", '(?i)\splease\s'] 
     for item in remove_list:
         text = re.sub(r''+item+'', ' ', text)   
     return text
