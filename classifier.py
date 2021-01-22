@@ -183,13 +183,12 @@ def generate_explainer_html(n_clicks, n_submit, username,
               Input(component_id="classification-bar", component_property="n_submit")],
               [State(component_id="classification-bar", component_property="value")])
 def generate_explainer_html(n_clicks, n_submit, username, 
-                            api=api, model=nb_model, vectorizer=vectorizer,
+                            model=nb_model, vectorizer=vectorizer,
                             class_names = [name.replace('_', ' ').title() for name in list(school_label_dict.keys())]):
     if n_clicks < 1 and n_submit < 1:
         return [html.Br(), html.P('The classification can take some time. Please be patient, and your text classification will appear here when it is ready.')]
     if n_clicks > 0 or n_submit > 0:
         # try:
-            tweets = get_tweet_text(api, username)   
             text = clean_text_for_explaining(tweets)
             # class_names = [name.replace('_', ' ').title() for name in list(school_label_dict.keys())]
             # explainer = lime_text.LimeTextExplainer(class_names=class_names,
