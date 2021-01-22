@@ -46,11 +46,15 @@ def clean_text_for_explaining(text):
         text = re.sub(r''+item+'', ' ', text)   
     return text
 
-def classify_text(to_classify, model, vectorizer):
+def classify_text(to_classify, model, vectorizer, class_names):
     predictor_pipeline = make_pipeline(vectorizer, model) 
-    class_names = ['analytic', 'continental', 'phenomenology', 'german_idealism', 'plato', 'aristotle', 'empiricism', 'rationalism']
+    # class_names = ['analytic', 'continental', 'phenomenology', 'german_idealism', 'plato', 'aristotle', 'empiricism', 'rationalism']
     explainer = LimeTextExplainer(class_names=class_names)
-    exp = explainer.explain_instance(to_classify, predictor_pipeline.predict_proba, num_features=8, labels=[0, 1, 2, 3, 4, 5, 6, 7])
+    exp = explainer.explain_instance(to_classify, 
+                                    predictor_pipeline.predict_proba, 
+                                    num_features=8, 
+                                    labels=[0, 1, 2, 3, 4, 5, 6, 7],
+                                    top_labels=3)
     # exp.show_in_notebook(text=True)
     return exp
 
