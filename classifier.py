@@ -109,7 +109,7 @@ twitter_bar = html.Div(id="twitter-bar-container", children=
                     type='text',
                     n_submit=0,
                     autoFocus=True,
-                    style={'width': '100%'}), width=7),
+                    style={'width': '100%'}), width=8),
         dbc.Col(dbc.Button("SUBMIT", id="twitter-bar-submit-button", color="primary", className="mr-1", n_clicks=0), width=1.8)
     ])
 ])
@@ -122,7 +122,7 @@ search_bar = html.Div(id="classification-bar-container", children=
                     placeholder="Enter text to classify - the more you can provide, the more accurate the classification will be. \n\nNote that some very common words will be removed from your submission to improve classification accuracy.",
                     # type='text',
                     # n_submit=0,
-                    style={'width': '100%', 'height': 100, 'vertical-align': 'top', 'text-align': 'left'},),
+                    style={'width': '100%', 'height': 90},),
         dbc.Button("SUBMIT", id="classification-bar-submit-button", color="primary", className="mr-1", n_clicks=0)
     ])
 
