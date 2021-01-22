@@ -48,11 +48,16 @@ app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
 #         X = pad_sequences(X, maxlen=self.maxlen)
 #         return X
 
-# pull keys from environment
-consumer_key = os.environ['TWITTER_CONSUMER_KEY']
-consumer_secret = os.environ['TWITTER_CONSUMER_SECRET']
-access_token = os.environ['TWITTER_ACCESS_TOKEN']
-access_secret = os.environ['TWITTER_ACCESS_SECRET']
+# # pull keys from environment
+# consumer_key = os.environ['TWITTER_CONSUMER_KEY']
+# consumer_secret = os.environ['TWITTER_CONSUMER_SECRET']
+# access_token = os.environ['TWITTER_ACCESS_TOKEN']
+# access_secret = os.environ['TWITTER_ACCESS_SECRET']
+
+# # Twitter Auth
+# auth = tw.OAuthHandler(consumer_key, consumer_secret)
+# auth.set_access_token(access_token, access_secret)
+# api = tw.API(auth)
 
 
 # model_path = 'model_data\classification_models\\NN_weights_epoch_09_0.7928.hdf5'
@@ -88,10 +93,10 @@ school_label_dict = {'analytic': 0,
  'rationalism': 9}
 
 
-# Twitter Auth
-auth = tw.OAuthHandler(consumer_key, consumer_secret)
-auth.set_access_token(access_token, access_secret)
-api = tw.API(auth)
+# # Twitter Auth
+# auth = tw.OAuthHandler(consumer_key, consumer_secret)
+# auth.set_access_token(access_token, access_secret)
+# api = tw.API(auth)
 
 
 
@@ -152,11 +157,21 @@ def render_content(tab):
               Input(component_id="twitter-bar", component_property="n_submit")],
               [State(component_id="twitter-bar", component_property="value")])
 def generate_explainer_html(n_clicks, n_submit, username, 
-                            api=api,#model=nb_model, vectorizer=vectorizer,
+                            # api=api,#model=nb_model, vectorizer=vectorizer,
                             class_names = [name.replace('_', ' ').title() for name in list(school_label_dict.keys())]):
     if n_clicks < 1 and n_submit < 1:
         return [html.Br(), html.P('The classification can take some time. Please be patient, and your text classification will appear here when it is ready.')]
     if n_clicks > 0 or n_submit > 0:
+        
+        consumer_key = os.environ['TWITTER_CONSUMER_KEY']
+        consumer_secret = os.environ['TWITTER_CONSUMER_SECRET']
+        access_token = os.environ['TWITTER_ACCESS_TOKEN']
+        access_secret = os.environ['TWITTER_ACCESS_SECRET']
+
+        # Twitter Auth
+        auth = tw.OAuthHandler(consumer_key, consumer_secret)
+        auth.set_access_token(access_token, access_secret)
+        api = tw.API(auth)
         with open('NB_model.pkl', 'rb') as f:
             nb_model = pickle.load(f)
         with open('vectorizer.pkl', 'rb') as f:
@@ -188,15 +203,15 @@ def generate_explainer_html(n_clicks, n_submit, username,
 
 # callback for search bar
 @app.callback(Output(component_id="classification-bar-output", component_property="children"),
-              [Input(component_id="classification-bar-submit-button", component_property="n_clicks"),
-              Input(component_id="classification-bar", component_property="n_submit")],
+              [Input(component_id="classification-bar-submit-button", component_property="n_clicks")],
+            #   Input(component_id="classification-bar", component_property="n_submit")],
               [State(component_id="classification-bar", component_property="value")])
 def generate_explainer_html(n_clicks, n_submit, text, 
                             # model=nb_model, vectorizer=vectorizer,
                             class_names = [name.replace('_', ' ').title() for name in list(school_label_dict.keys())]):
-    if n_clicks < 1 and n_submit < 1:
+    if n_clicks < 1:# and n_submit < 1:
         return [html.Br(), html.P('The classification can take some time. Please be patient, and your text classification will appear here when it is ready.')]
-    if n_clicks > 0 or n_submit > 0:
+    if n_clicks > 0:# or n_submit > 0:
         with open('NB_model.pkl', 'rb') as f:
             nb_model = pickle.load(f)
         with open('vectorizer.pkl', 'rb') as f:
