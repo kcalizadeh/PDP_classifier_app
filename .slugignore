@@ -1,3 +1,5 @@
 __pycache__
 *.hdf5
 gru_tokenizer.pkl
+NN_weights_epoch_09_0.7928.hdf5
+test.ipynb

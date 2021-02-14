@@ -122,7 +122,7 @@ search_bar = html.Div(id="classification-bar-container", children=
                     placeholder="Enter text to classify - the more you can provide, the more accurate the classification will be. \n\nNote that some very common words will be removed from your submission to improve classification accuracy.",
                     # type='text',
                     # n_submit=0,
-                    style={'width': '100%', 'height': 90},),
+                    style={'width': '100%', 'height': 100},),
         dbc.Button("SUBMIT", id="classification-bar-submit-button", color="primary", className="mr-1", n_clicks=0)
     ])
 
@@ -166,42 +166,43 @@ def generate_explainer_html(n_clicks, n_submit, username,
     if n_clicks < 1 and n_submit < 1:
         return [html.Br(), html.P('The classification can take some time. Please be patient, and your text classification will appear here when it is ready.')]
     if n_clicks > 0 or n_submit > 0:
-        
-        consumer_key = os.environ['TWITTER_CONSUMER_KEY']
-        consumer_secret = os.environ['TWITTER_CONSUMER_SECRET']
-        access_token = os.environ['TWITTER_ACCESS_TOKEN']
-        access_secret = os.environ['TWITTER_ACCESS_SECRET']
+            if len(username) > 0:
+            
+                consumer_key = os.environ['TWITTER_CONSUMER_KEY']
+                consumer_secret = os.environ['TWITTER_CONSUMER_SECRET']
+                access_token = os.environ['TWITTER_ACCESS_TOKEN']
+                access_secret = os.environ['TWITTER_ACCESS_SECRET']
 
-        # Twitter Auth
-        auth = tw.OAuthHandler(consumer_key, consumer_secret)
-        auth.set_access_token(access_token, access_secret)
-        api = tw.API(auth)
-        with open('NB_model.pkl', 'rb') as f:
-            nb_model = pickle.load(f)
-        with open('vectorizer.pkl', 'rb') as f:
-            vectorizer = pickle.load(f)
-        try:
-            tweets = get_tweet_text(api, username)   
-            text = clean_text_for_explaining(tweets)
-            # class_names = [name.replace('_', ' ').title() for name in list(school_label_dict.keys())]
-            # explainer = lime_text.LimeTextExplainer(class_names=class_names,
-            #                                         bow=False,
-            #                                         split_expression=r'[\s+|\.\s+|,\s+]')
-            # exp = explainer.explain_instance(text, 
-            #                                 pipeline.predict, 
-            #                                 num_features=10, 
-            #                                 labels=[0,1,2,3,4,5,6,7,8,9],
-            #                                 top_labels=3)
-            exp = classify_text(text, nb_model, vectorizer, class_names=class_names)
-            obj = html.Iframe(
-                srcDoc=exp.as_html(),
-                width='100%',
-                height='800px',
-                style={'border': '2px #d3d3d3 solid'},
-            )
-            return obj
-        except:
-            return 'Sorry, something went wrong.'
+                # Twitter Auth
+                auth = tw.OAuthHandler(consumer_key, consumer_secret)
+                auth.set_access_token(access_token, access_secret)
+                api = tw.API(auth)
+                with open('NB_model.pkl', 'rb') as f:
+                    nb_model = pickle.load(f)
+                with open('vectorizer.pkl', 'rb') as f:
+                    vectorizer = pickle.load(f)
+                try:
+                    tweets = get_tweet_text(api, username)   
+                    text = clean_text_for_explaining(tweets)
+                    # class_names = [name.replace('_', ' ').title() for name in list(school_label_dict.keys())]
+                    # explainer = lime_text.LimeTextExplainer(class_names=class_names,
+                    #                                         bow=False,
+                    #                                         split_expression=r'[\s+|\.\s+|,\s+]')
+                    # exp = explainer.explain_instance(text, 
+                    #                                 pipeline.predict, 
+                    #                                 num_features=10, 
+                    #                                 labels=[0,1,2,3,4,5,6,7,8,9],
+                    #                                 top_labels=3)
+                    exp = classify_text(text, nb_model, vectorizer, class_names=class_names)
+                    obj = html.Iframe(
+                        srcDoc=exp.as_html(),
+                        width='100%',
+                        height='800px',
+                        style={'border': '2px #d3d3d3 solid'},
+                    )
+                    return obj
+                except:
+                    return 'Sorry, something went wrong.'
 
 
 
@@ -215,7 +216,7 @@ def generate_explainer_html(n_clicks, text,
                             class_names = [name.replace('_', ' ').title() for name in list(school_label_dict.keys())]):
     if n_clicks < 1:# and n_submit < 1:
         return [html.Br(), html.P('The classification can take some time. Please be patient, and your text classification will appear here when it is ready.')]
-    if n_clicks > 0:# or n_submit > 0:
+    if n_clicks > 0 and len(text) > 0:# or n_submit > 0:
         with open('NB_model.pkl', 'rb') as f:
             nb_model = pickle.load(f)
         with open('vectorizer.pkl', 'rb') as f:
